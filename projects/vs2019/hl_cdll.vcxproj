@@ -21,7 +21,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>NotSet</CharacterSet>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -42,7 +42,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>C:\Program Files (x86)\Steam\steamapps\common\Half-Life\updated\cl_dlls\</OutDir>
+    <OutDir>$(Configuration)\$(ProjectName)</OutDir>
     <TargetName>client</TargetName>
     <IntDir>$(Configuration)\$(ProjectName)\int\</IntDir>
   </PropertyGroup>
@@ -141,6 +141,7 @@
     <ClCompile Include="..\..\cl_dll\in_camera.cpp" />
     <ClCompile Include="..\..\cl_dll\menu.cpp" />
     <ClCompile Include="..\..\cl_dll\message.cpp" />
+    <ClCompile Include="..\..\cl_dll\physics.cpp" />
     <ClCompile Include="..\..\cl_dll\saytext.cpp" />
     <ClCompile Include="..\..\cl_dll\statusbar.cpp" />
     <ClCompile Include="..\..\cl_dll\status_icons.cpp" />
@@ -210,6 +211,8 @@
     <ClInclude Include="..\..\cl_dll\interpolation.h" />
     <ClInclude Include="..\..\cl_dll\in_defs.h" />
     <ClInclude Include="..\..\cl_dll\kbutton.h" />
+    <ClInclude Include="..\..\cl_dll\physics.h" />
+    <ClInclude Include="..\..\cl_dll\phy_corpse.h" />
     <ClInclude Include="..\..\cl_dll\StudioModelRenderer.h" />
     <ClInclude Include="..\..\cl_dll\tri.h" />
     <ClInclude Include="..\..\cl_dll\util_vector.h" />

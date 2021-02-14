@@ -1,4 +1,15 @@
-Half Life 1 SDK LICENSE
+# HalfLife 1 Ragdoll MOD
+This repo shows how to make client side ragdoll effect using GoldsrcPhysics (a lib written in C#).
+
+All changes in these flies:
+
+* M GameStudioModelRenderer.h/cpp
+* A physics.h/cpp
+* A phy_corpse.h
+* cdll_int.cpp
+> git diff tells you what I do.
+
+# Half Life 1 SDK LICENSE
 ======================
 
 Half Life 1 SDK Copyright© Valve Corp.  

@@ -38,6 +38,8 @@
 #include "tri.h"
 #include "vgui_TeamFortressViewport.h"
 #include "../public/interface.h"
+#include "phy_corpse.h"
+#include"physics.h"
 
 cl_enginefunc_t gEngfuncs;
 CHud gHUD;
@@ -170,6 +172,13 @@ int DLLEXPORT HUD_VidInit( void )
 	gHUD.VidInit();
 
 	VGui_Startup();
+
+	const char* pLevelName=gEngfuncs.pfnGetLevelName();
+	gPhysics.ChangeLevel(pLevelName);
+
+	if (!pgCorpseMgr)
+		delete pgCorpseMgr;
+	pgCorpseMgr = new CorpseManager();
 
 	return 1;
 }

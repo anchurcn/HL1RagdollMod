@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright ?1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -21,6 +21,12 @@ class CGameStudioModelRenderer : public CStudioModelRenderer
 {
 public:
 	CGameStudioModelRenderer( void );
+	// override public interfaces
+	virtual int StudioDrawModel(int flags);
+	virtual int StudioDrawPlayer(int flags, struct entity_state_s* pplayer);
+
+	virtual void Init(void);
+	int StudioDrawRagdoll(int flags);
 };
 
 #endif // GAMESTUDIOMODELRENDERER_H

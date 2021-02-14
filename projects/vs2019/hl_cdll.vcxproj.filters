@@ -306,6 +306,9 @@
     <ClCompile Include="..\..\pm_shared\pm_shared.cpp">
       <Filter>Source Files\pm_shared</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\cl_dll\physics.cpp">
+      <Filter>Source Files\cl_dll</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\cl_dll\kbutton.h">
@@ -430,6 +433,12 @@
     </ClInclude>
     <ClInclude Include="..\..\common\Platform.h">
       <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cl_dll\physics.h">
+      <Filter>Header Files\cl_dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cl_dll\phy_corpse.h">
+      <Filter>Header Files\cl_dll</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
