@@ -371,6 +371,11 @@ TEMPENTITY* CorpseManager::CreateRagdollCorpse(cl_entity_t* ent)
 	gPhysics.CreateRagdollControllerHeader(tempent->entity.index, IEngineStudio.Mod_Extradata(ent->model));
 	gPhysics.StartRagdoll(tempent->entity.index);
 	gPhysics.SetVelocity(tempent->entity.index, (Vector3*)&ent->curstate.velocity);
+
+	cl_entity_t* local = gEngfuncs.GetLocalPlayer();
+	Vector v = (ent->origin - local->origin).Normalize();
+	v = v * 5;
+	gPhysics.SetVelocity(tempent->entity.index, (Vector3*)&v);
 	
 	gEngfuncs.Con_DPrintf("corpse [%d]'s velocity is %f\n", tempent->entity.index, ent->curstate.velocity.Length());
 	gEngfuncs.Con_DPrintf("create corpse [%d] for entity [%d]\n", tempent->entity.index, ent->index);
