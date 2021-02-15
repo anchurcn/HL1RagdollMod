@@ -54,7 +54,7 @@ void CGameStudioModelRenderer::Init(void)
 {
 	CStudioModelRenderer::Init();
 	InitPhysicsInterface(NULL);
-	gPhysics.InitSystem(&m_clTime, m_plighttransform, &IEngineStudio);
+	gPhysics.InitSystem("valve", &IEngineStudio);
 }
 int CGameStudioModelRenderer::StudioDrawRagdoll(int flags)
 {
@@ -92,7 +92,6 @@ int CGameStudioModelRenderer::StudioDrawRagdoll(int flags)
 	}
 	else
 	{
-		StudioSetupBones();
 		gPhysics.SetupBonesPhysically(m_pCurrentEntity->index);
 		m_pCurrentEntity->origin.x = (*m_pbonetransform)[1][0][3];
 		m_pCurrentEntity->origin.y = (*m_pbonetransform)[1][1][3];
@@ -136,6 +135,7 @@ int CGameStudioModelRenderer::StudioDrawRagdoll(int flags)
 	return 1;
 }
 cvar_t* _drawOriginalDead = NULL;
+bool gIsShoot = false;
 int CGameStudioModelRenderer::StudioDrawModel(int flags)
 {
 	// we need a better place to call the physics update function
@@ -197,7 +197,9 @@ int CGameStudioModelRenderer::StudioDrawModel(int flags)
 			// init pose
 			CStudioModelRenderer::StudioDrawModel(0);
 
-			pgCorpseMgr->CreateRagdollCorpse(m_pCurrentEntity);
+			TEMPENTITY* tempent = pgCorpseMgr->CreateRagdollCorpse(m_pCurrentEntity);
+			// Set init ragdoll pose
+			gPhysics.SetPose(tempent->entity.index, (float*)m_pbonetransform);
 			pgCorpseMgr->EntityDie(m_pCurrentEntity);
 		}
 		else
@@ -368,9 +370,14 @@ TEMPENTITY* CorpseManager::CreateRagdollCorpse(cl_entity_t* ent)
 	tempent->die = 3000;
 	tempent->fadeSpeed = 1;
 	tempent->entity.index = _corpseIndex++;
-	gPhysics.CreateRagdollControllerHeader(tempent->entity.index, IEngineStudio.Mod_Extradata(ent->model));
+	gPhysics.CreateRagdollControllerModel(tempent->entity.index, (ent->model));
 	gPhysics.StartRagdoll(tempent->entity.index);
 	gPhysics.SetVelocity(tempent->entity.index, (Vector3*)&ent->curstate.velocity);
+
+	cl_entity_t* local = gEngfuncs.GetLocalPlayer();
+	Vector v = (ent->origin - local->origin).Normalize();
+	v = v * 5;
+	gPhysics.SetVelocity(tempent->entity.index, (Vector3*)&v);
 	
 	gEngfuncs.Con_DPrintf("corpse [%d]'s velocity is %f\n", tempent->entity.index, ent->curstate.velocity.Length());
 	gEngfuncs.Con_DPrintf("create corpse [%d] for entity [%d]\n", tempent->entity.index, ent->index);

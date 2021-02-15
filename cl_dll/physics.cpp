@@ -1,5 +1,5 @@
 
-#include"physics.h"
+#include<physics.h>
 #include <metahost.h>
 #include<stdio.h>
 #include<Windows.h>
@@ -9,11 +9,10 @@
 
 PhsicsAPI gPhysics;
 
-
 #ifdef _DEBUG
 const wchar_t PhyDllPath[] = L".\\gsphysics\\bin\\GoldsrcPhysics.dll";
 #else// _DEBUG
-const wchar_t PhyDllPath[] = L"\\gsphysics\\GoldsrcPhysics.dll";
+const wchar_t PhyDllPath[] = L".\\gsphysics\\bin\\GoldsrcPhysics.dll";
 #endif
 
 //globle CLR handle
@@ -66,16 +65,17 @@ int ExitCLR()
 	return 0;
 }
 
-void* GetFunctionPointer(const LPCWSTR name)
+void* GetFunctionPointer(LPWSTR name)
 {
 	void* pfn = NULL;
 
-	wchar_t buffer[64];//marshal args to [0xXXXX|MethodName] format
-	swprintf(buffer, 64, L"%p|%s", &pfn, name);
+	const int bufsize = 128;
+	wchar_t buffer[bufsize];//marshal args to [0xXXXX|MethodName] format
+	swprintf(buffer, bufsize, L"%p|%s", &pfn, name);
 
 	DWORD dwRet = 0;
 	HRESULT hr = pRuntimeHost->ExecuteInDefaultAppDomain(PhyDllPath,
-		L"GoldsrcPhysics.ExportAPIs.PhysicsMain",
+		L"UsrSoft.ManagedExport.ManagedExporter",
 		L"GetFunctionPointer",
 		buffer,
 		&dwRet);
@@ -92,26 +92,32 @@ void* GetFunctionPointer(const LPCWSTR name)
 extern "C" void InitPhysicsInterface(char* msg)
 {
 	InitCLR();
-	gPhysics.Test = (void(_stdcall*)())GetFunctionPointer(L"Test");
-	gPhysics.InitSystem = (void(_stdcall*)(void* pStudioRenderer, void* lastFieldAddress, void* engineStudioAPI))GetFunctionPointer(L"InitSystem");
-	gPhysics.ChangeLevel = (void(_stdcall*)(const char* mapName))GetFunctionPointer(L"ChangeLevel");
-	gPhysics.LevelReset = (void(_stdcall*)())GetFunctionPointer(L"LevelReset");
-	gPhysics.Update = (void(_stdcall*)(float delta))GetFunctionPointer(L"Update");
-	gPhysics.Pause = (void(_stdcall*)())GetFunctionPointer(L"Pause");
-	gPhysics.Resume = (void(_stdcall*)())GetFunctionPointer(L"Resume");
-	gPhysics.ShotDown = (void(_stdcall*)())GetFunctionPointer(L"ShotDown");
-	gPhysics.ShowConfigForm = (void(_stdcall*)())GetFunctionPointer(L"ShowConfigForm");
-	gPhysics.CreateRagdollController = (void(_stdcall*)(int entityId, const char* modelName))GetFunctionPointer(L"CreateRagdollController");
-	gPhysics.CreateRagdollControllerIndex = (void(_stdcall*)(int entityId, int index))GetFunctionPointer(L"CreateRagdollControllerIndex");
-	gPhysics.CreateRagdollControllerHeader = (void(_stdcall*)(int entityId, void * hdr))GetFunctionPointer(L"CreateRagdollControllerHeader");
-	gPhysics.StartRagdoll = (void(_stdcall*)(int entityId))GetFunctionPointer(L"StartRagdoll");
-	gPhysics.StopRagdoll = (void(_stdcall*)(int entityId))GetFunctionPointer(L"StopRagdoll");
-	gPhysics.SetupBonesPhysically = (void(_stdcall*)(int entityId))GetFunctionPointer(L"SetupBonesPhysically");
-	gPhysics.ChangeOwner = (void(_stdcall*)(int oldEntity, int newEntity))GetFunctionPointer(L"ChangeOwner");
-	gPhysics.SetVelocity = (void(_stdcall*)(int entityId, Vector3 * v))GetFunctionPointer(L"SetVelocity");
-	gPhysics.DisposeRagdollController = (void(_stdcall*)(int entityId))GetFunctionPointer(L"DisposeRagdollController");
-	gPhysics.Explosion = (void(_stdcall*)(Vector3 * pos, float intensity))GetFunctionPointer(L"Explosion");
-	gPhysics.Shoot = (void(_stdcall*)(Vector3 * from, Vector3 * force))GetFunctionPointer(L"Shoot");
-	gPhysics.PickBody = (void(_stdcall*)())GetFunctionPointer(L"PickBody");
-	gPhysics.ReleaseBody = (void(_stdcall*)())GetFunctionPointer(L"ReleaseBody");
+	gPhysics.Set = (void(_stdcall*)(const char* key, const char* value))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.Set");
+	gPhysics.Test = (void(_stdcall*)())GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.Test");
+	gPhysics.InitSystem = (void(_stdcall*)(const char* modFolder, void* pEngineStudioAPI))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.InitSystem");
+	gPhysics.ChangeLevel = (void(_stdcall*)(const char* mapName))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.ChangeLevel");
+	gPhysics.LevelReset = (void(_stdcall*)())GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.LevelReset");
+	gPhysics.Update = (void(_stdcall*)(float delta))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.Update");
+	gPhysics.Pause = (void(_stdcall*)())GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.Pause");
+	gPhysics.Resume = (void(_stdcall*)())GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.Resume");
+	gPhysics.ShotDown = (void(_stdcall*)())GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.ShotDown");
+	gPhysics.ShowConfigForm = (void(_stdcall*)())GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.ShowConfigForm");
+	gPhysics.CreateRagdollController = (void(_stdcall*)(int entityId, char* modelName))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.CreateRagdollController");
+	gPhysics.CreateRagdollControllerIndex = (void(_stdcall*)(int entityId, int index))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.CreateRagdollControllerIndex");
+	gPhysics.CreateRagdollControllerModel = (void(_stdcall*)(int entityId, void * model))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.CreateRagdollControllerModel");
+	gPhysics.StartRagdoll = (void(_stdcall*)(int entityId))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.StartRagdoll");
+	gPhysics.StopRagdoll = (void(_stdcall*)(int entityId))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.StopRagdoll");
+	gPhysics.SetupBonesPhysically = (void(_stdcall*)(int entityId))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.SetupBonesPhysically");
+	gPhysics.ChangeOwner = (void(_stdcall*)(int oldEntity, int newEntity))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.ChangeOwner");
+	gPhysics.SetVelocity = (void(_stdcall*)(int entityId, Vector3 * v))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.SetVelocity");
+	gPhysics.DisposeRagdollController = (void(_stdcall*)(int entityId))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.DisposeRagdollController");
+	gPhysics.ImpulseBone = (void(_stdcall*)(int entityId, int boneId, Vector3 * force))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.ImpulseBone");
+	gPhysics.ClearRagdoll = (void(_stdcall*)())GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.ClearRagdoll");
+	gPhysics.HeadShootRagdoll = (void(_stdcall*)(int entityId, Vector3 * force))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.HeadShootRagdoll");
+	gPhysics.Explosion = (void(_stdcall*)(Vector3 * pos, float intensity))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.Explosion");
+	gPhysics.Shoot = (void(_stdcall*)(Vector3 * from, Vector3 * force))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.Shoot");
+	gPhysics.PickBodyLocal = (void(_stdcall*)(Vector3 from, Vector3 to))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.PickBodyLocal");
+	gPhysics.ReleaseBodyLocal = (void(_stdcall*)())GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.ReleaseBodyLocal");
+	gPhysics.MoveBodyLocal = (void(_stdcall*)(Vector3 from, Vector3 to))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.MoveBodyLocal");
+	gPhysics.SetPose = (void(_stdcall*)(int entityId, float* pBoneWorldTransform))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.SetPose");
 }
