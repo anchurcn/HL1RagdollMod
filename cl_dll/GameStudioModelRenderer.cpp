@@ -183,6 +183,7 @@ int CGameStudioModelRenderer::StudioDrawModel(int flags)
 	if (pgCorpseMgr->IsRagdollCorpse(m_pCurrentEntity))
 		return StudioDrawRagdoll(flags);
 
+	if(m_pCurrentEntity->index)// pass worldspawn or tempentity
 	// hard coded here, we need a better way.
 	if ((31 <= m_pCurrentEntity->curstate.sequence &&
 		m_pCurrentEntity->curstate.sequence <= 43 &&

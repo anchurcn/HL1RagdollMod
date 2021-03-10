@@ -174,11 +174,13 @@ int DLLEXPORT HUD_VidInit( void )
 	VGui_Startup();
 
 	const char* pLevelName=gEngfuncs.pfnGetLevelName();
-	gPhysics.ChangeLevel(pLevelName);
+	if (pLevelName && pLevelName[0]) {
+		gPhysics.ChangeLevel(pLevelName);
+		if (!pgCorpseMgr)
+			delete pgCorpseMgr;
+		pgCorpseMgr = new CorpseManager();
+	}
 
-	if (!pgCorpseMgr)
-		delete pgCorpseMgr;
-	pgCorpseMgr = new CorpseManager();
 
 	return 1;
 }
