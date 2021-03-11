@@ -348,7 +348,11 @@ void CorpseManager::EntityRespawn(cl_entity_t* ent)
 {
 	_entityDead[ent->index] = false;
 }
-
+void OnRagdollKill(struct tempent_s* ent, float frametime, float currenttime)
+{
+	gPhysics.DisposeRagdollController(ent->entity.index);
+	gEngfuncs.Con_DPrintf("free ragdoll [%d]\n", ent->entity.index);
+}
 TEMPENTITY* CorpseManager::CreateRagdollCorpse(cl_entity_t* ent)
 {
 	TEMPENTITY* tempent = gEngfuncs.pEfxAPI->CL_TempEntAlloc(ent->curstate.origin, ent->model);
@@ -368,8 +372,9 @@ TEMPENTITY* CorpseManager::CreateRagdollCorpse(cl_entity_t* ent)
 	tempstate->frame = entstate->frame;
 	
 
-	tempent->die = 3000;
-	tempent->fadeSpeed = 1;
+	tempent->die = gEngfuncs.GetClientTime() + 30;
+	tempent->flags = FTENT_KILLCALLBACK;
+	tempent->callback = OnRagdollKill;
 	tempent->entity.index = _corpseIndex++;
 	gPhysics.CreateRagdollControllerModel(tempent->entity.index, (ent->model));
 	gPhysics.StartRagdoll(tempent->entity.index);

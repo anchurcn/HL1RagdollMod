@@ -470,6 +470,9 @@ void DLLEXPORT HUD_TempEntUpdate (
 		}
 		if ( !active )		// Kill it
 		{
+			if (pTemp->callback && pTemp->flags & FTENT_KILLCALLBACK)
+				pTemp->callback(pTemp, frametime, client_time);
+
 			pTemp->next = *ppTempEntFree;
 			*ppTempEntFree = pTemp;
 			if ( !pprev )	// Deleting at head of list
