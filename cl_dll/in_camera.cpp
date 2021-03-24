@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright ?1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -149,10 +149,13 @@ typedef struct
 } moveclip_t;
 
 extern trace_t SV_ClipMoveToEntity (edict_t *ent, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end);
-
+void HUD_CheckNewMapStarted();
 void DLLEXPORT CAM_Think( void )
 {
 //	RecClCamThink();
+	//This is the earliest unconditional client library callback that gets called after a connection to a server has been established.
+	//It's the first chance we have to get the map name. - Solokiller
+	HUD_CheckNewMapStarted();
 
 	vec3_t origin;
 	vec3_t ext, pnt, camForward, camRight, camUp;
