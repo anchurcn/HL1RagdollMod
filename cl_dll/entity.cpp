@@ -16,6 +16,9 @@
 #include "Exports.h"
 
 #include "particleman.h"
+#include"com_model.h"
+#include "physics.h"
+#include"phy_corpse.h"
 extern IParticleMan *g_pParticleMan;
 
 void Game_AddObjects( void );
@@ -59,6 +62,21 @@ int DLLEXPORT HUD_AddEntity( int type, struct cl_entity_s *ent, const char *mode
 				ent->index == g_iUser2 )
 			return 0;	// don't draw the player we are following in eye
 
+	}
+	if (!gMapExistTempEnt)
+	{
+		cl_entity_t* local = gEngfuncs.GetLocalPlayer();
+		TEMPENTITY* tent = gEngfuncs.pEfxAPI->CL_TempEntAllocNoModel(local->curstate.origin);
+		tent->die = 0x7fffffff;
+		gMapExistTempEnt = 1;
+	}
+
+	if (ent->index)
+	{
+		if (ent->model->type == modtype_t::mod_brush || ent->model->type == modtype_t::mod_studio)
+		{
+			gPhysics.AddCollider((cl_entity_t*)ent);
+		}
 	}
 
 	return 1;
@@ -753,6 +771,7 @@ void DLLEXPORT HUD_TempEntUpdate (
 finish:
 	// Restore state info
 	gEngfuncs.pEventAPI->EV_PopPMStates();
+	gPhysics.Update(frametime);
 }
 
 /*

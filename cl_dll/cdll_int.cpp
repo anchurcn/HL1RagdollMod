@@ -179,6 +179,7 @@ int DLLEXPORT HUD_VidInit( void )
 		if (!pgCorpseMgr)
 			delete pgCorpseMgr;
 		pgCorpseMgr = new CorpseManager();
+		gMapExistTempEnt = 0;
 	}
 
 

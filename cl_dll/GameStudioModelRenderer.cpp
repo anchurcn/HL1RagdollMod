@@ -140,13 +140,6 @@ int CGameStudioModelRenderer::StudioDrawModel(int flags)
 {
 	// we need a better place to call the physics update function
 #pragma region physics world update
-	static int lastFrame = -1;
-	IEngineStudio.GetTimes(&lastFrame, &m_clTime, &m_clOldTime);
-	if (lastFrame != m_nFrameCount)
-	{
-		gPhysics.Update(m_clTime - m_clOldTime);
-		lastFrame = m_nFrameCount;
-	}
 #pragma endregion
 
 	// init
@@ -327,6 +320,7 @@ int DLLEXPORT HUD_GetStudioModelInterface( int version, struct r_studio_interfac
 }
 
 #pragma region phy_corpse.cpp
+bool gMapExistTempEnt = 0;
 CorpseManager* pgCorpseMgr = nullptr;
 
 CorpseManager::CorpseManager(void)

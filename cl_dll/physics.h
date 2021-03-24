@@ -167,6 +167,8 @@ typedef struct PhsicsAPI_s
 
     void(_stdcall*SetPose)(int entityId, float* pBoneWorldTransform);
 
+    void(_stdcall* AddCollider)(void* pEntity);
+
 }PhsicsAPI;
 
 

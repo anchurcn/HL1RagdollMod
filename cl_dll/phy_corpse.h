@@ -9,6 +9,10 @@
 
 #define MAX_ENTITIES 512
 
+// If there doesn't exist a tempent, the TempEntUpdate() will not be called.
+// So the physics world can't be update and the game crashes.
+extern bool gMapExistTempEnt;
+
 class CorpseManager
 {
 public:

@@ -120,4 +120,5 @@ extern "C" void InitPhysicsInterface(char* msg)
 	gPhysics.ReleaseBodyLocal = (void(_stdcall*)())GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.ReleaseBodyLocal");
 	gPhysics.MoveBodyLocal = (void(_stdcall*)(Vector3 from, Vector3 to))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.MoveBodyLocal");
 	gPhysics.SetPose = (void(_stdcall*)(int entityId, float* pBoneWorldTransform))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.SetPose");
+	gPhysics.AddCollider = (void(_stdcall*)(void*))GetFunctionPointer(L"GoldsrcPhysics.ExportAPIs.PhysicsMain.AddCollider");
 }
