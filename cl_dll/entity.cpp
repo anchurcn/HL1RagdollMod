@@ -71,11 +71,16 @@ int DLLEXPORT HUD_AddEntity( int type, struct cl_entity_s *ent, const char *mode
 		gMapExistTempEnt = 1;
 	}
 
-	if (ent->index)
+	if (ent->index&&ent->index<512)
 	{
-		if (ent->model->type == modtype_t::mod_brush || ent->model->type == modtype_t::mod_studio)
+		if (ent->model->type == modtype_t::mod_brush)
 		{
-			gPhysics.AddCollider((cl_entity_t*)ent);
+			gPhysics.AddCollider(ent);
+		}
+		else if(ent->model->type == modtype_t::mod_studio)
+		{
+			if (!pgCorpseMgr->IsEntityDead(ent))
+				gPhysics.AddCollider(ent);
 		}
 	}
 
